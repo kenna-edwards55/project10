@@ -22,3 +22,4 @@ fun SensorActivity(navController: NavHostController) {
         // ...
     }
 }
+
