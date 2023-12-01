@@ -29,23 +29,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import java.io.IOException
 
-data class WeatherResponse(val main: WeatherMain)
 
-data class WeatherMain(val temp: Float)
-
-interface WeatherApi {
-    @GET("weather")
-    fun getWeather(
-        @Query("lat") lat: Double,
-        @Query("lon") lon: Double,
-        @Query("appid") apiKey: String
-    ): Call<WeatherResponse>
-}
 class MainActivity : ComponentActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var locationPermissionGranted = false
     private var currentLocation: Pair<Double, Double>? by mutableStateOf(null)
-    private var currentTemperature: Float? by mutableStateOf(null)
+//    private var currentTemperature: Float? by mutableStateOf(null)
     private var currentState by mutableStateOf<String?>(null)
     private var currentCity by mutableStateOf<String?>(null)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +69,6 @@ class MainActivity : ComponentActivity() {
                     location?.let {
                         currentLocation = Pair(it.latitude, it.longitude)
                         getLocationData()
-//                        getWeatherData()
                     }
                 }
                 .addOnFailureListener { e ->
@@ -118,35 +106,6 @@ class MainActivity : ComponentActivity() {
         SharedState.currentState = SharedState.currentState
         SharedState.currentCity = SharedState.currentCity
     }
-//    private fun getWeatherData() {
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("http://api.openweathermap.org/data/2.5/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//
-//        val weatherApi = retrofit.create(WeatherApi::class.java)
-//        val apiKey = "YOUR_OPENWEATHERMAP_API_KEY"
-//
-//        currentLocation?.let { (latitude, longitude) ->
-//            weatherApi.getWeather(latitude, longitude, apiKey)
-//                .enqueue(object : retrofit2.Callback<WeatherResponse> {
-//                    override fun onResponse(
-//                        call: Call<WeatherResponse>,
-//                        response: retrofit2.Response<WeatherResponse>
-//                    ) {
-//                        if (response.isSuccessful) {
-//                            currentTemperature = response.body()?.main?.temp
-//                        } else {
-//                            Log.e("Weather", "Error: ${response.code()}")
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-//                        Log.e("Weather", "Failed to get weather data", t)
-//                    }
-//                })
-//        }
-//    }
 }
 
 @Composable
