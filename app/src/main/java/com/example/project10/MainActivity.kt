@@ -45,16 +45,16 @@ class MainActivity : ComponentActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var locationPermissionGranted = false
     private var currentLocation: Pair<Double, Double>? by mutableStateOf(null)
-    private var currentState: String? by mutableStateOf(null)
-    private var currentCity: String? by mutableStateOf(null)
     private var currentTemperature: Float? by mutableStateOf(null)
+    private var currentState by mutableStateOf<String?>(null)
+    private var currentCity by mutableStateOf<String?>(null)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Request location permission
-//        requestLocationPermission.launch(Manifest.permission.A)
+        requestLocationPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         setContent {
             Project10Theme {
                 // A surface container using the 'background' color from the theme
@@ -97,8 +97,10 @@ class MainActivity : ComponentActivity() {
 
                 if (addresses.isNotEmpty()) {
                     val address: Address = addresses[0]
-                    currentState = address.adminArea
-                    currentCity = address.locality
+                    SharedState.currentState = address.adminArea
+                    SharedState.currentCity = address.locality
+
+                    updateComposeUI()
 
                     // Now you can use 'currentState' and 'currentCity' as needed
                     Log.d("Location", "State: $currentState, City: $currentCity")
@@ -111,6 +113,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun updateComposeUI() {
+        // Notify Compose to re-compose the UI
+        SharedState.currentState = SharedState.currentState
+        SharedState.currentCity = SharedState.currentCity
+    }
 //    private fun getWeatherData() {
 //        val retrofit = Retrofit.Builder()
 //            .baseUrl("http://api.openweathermap.org/data/2.5/")
@@ -156,3 +163,5 @@ fun AppNavigator() {
         // Add a third activity if needed
     }
 }
+
+

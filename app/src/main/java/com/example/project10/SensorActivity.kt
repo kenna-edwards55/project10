@@ -12,7 +12,7 @@ fun SensorActivity(navController: NavHostController) {
     Column {
         // Add UI components for displaying sensor data
         Text("Your Name")
-        Text("Your Location: State, City")
+        Text("Your Location: ${SharedState.currentState}, ${SharedState.currentCity}\"")
         Text("Current Temperature")
         // Add a button for fling operation
         Button(onClick = { navController.navigate("gesture_activity") }) {
