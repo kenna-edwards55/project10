@@ -20,7 +20,6 @@ import com.example.project10.ui.theme.Project10Theme
 import com.google.android.gms.location.FusedLocationProviderClient
 import androidx.compose.runtime.*
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import java.io.IOException
 
@@ -114,6 +113,9 @@ fun AppNavigator() {
         composable("gesture_activity") {
             GestureActivity(navController)
         }
+//        composable("ball_canvas") {
+//            BallCanvas(navController)
+//        }
         // Add a third activity if needed
     }
 }
