@@ -38,6 +38,8 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding= true
+        dataBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -50,7 +52,8 @@ android {
 }
 
 dependencies {
-
+    implementation ("androidx.activity:activity-ktx:1.3.1")
+    implementation ("androidx.fragment:fragment-ktx:1.3.6")
     implementation ("org.jetbrains.kotlin:kotlin-stdlib")
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation ("com.google.android.material:material:1.10.0")
@@ -60,6 +63,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("androidx.compose.ui:ui:1.5.4")
     implementation( "androidx.compose.ui:ui-tooling:1.5.4")
+    implementation("androidx.compose.ui:ui-viewbinding")
     // Add the following dependencies for navigation-compose
     implementation( "androidx.navigation:navigation-compose:2.7.5")
     implementation("androidx.core:core-ktx:1.12.0")
@@ -72,6 +76,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("androidx.navigation:navigation-fragment:2.7.5")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

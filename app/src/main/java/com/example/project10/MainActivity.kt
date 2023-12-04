@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Request location permission
@@ -108,16 +109,14 @@ fun AppNavigator() {
 
     NavHost(navController = navController, startDestination = "sensor_activity") {
         composable("sensor_activity") {
-            SensorActivity(navController)
+            SensorActivityContent(navController)
         }
         composable("gesture_activity") {
-            GestureActivity(navController)
+            GestureActivityContent()
         }
-//        composable("ball_canvas") {
-//            BallCanvas(navController)
-//        }
-        // Add a third activity if needed
+
     }
 }
+
 
 

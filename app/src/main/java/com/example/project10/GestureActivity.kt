@@ -1,47 +1,49 @@
+// GestureActivity.kt
 package com.example.project10
 
-import BallCanvasFragment
+
+import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.KeyEventDispatcher.Component
-import androidx.navigation.NavHostController
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.remember
+import androidx.fragment.app.FragmentActivity
 
-// GestureActivity.kt
-@Composable
-fun GestureActivity(navController: NavHostController):ComponentActivity {
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+class GestureActivity : ComponentActivity() {
 
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Use AndroidView to embed the fragment
-        AndroidView(
-            factory = { context ->
-                // Create your fragment here
-               BallCanvasFragment()
-            },
-            modifier = Modifier
-                .fillMaxSize()
-        ) { fragmentView ->
-            // Fragment view is automatically added to the Compose UI
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            GestureActivityContent()
         }
     }
-    // Add UI components for GestureActivity
-    // ...
-    // Use fragments to divide the screen
-    // ...
-    // Use GestureDetector or onTouchEvent for red ball operation
-    // ...
 }
 
-//@Composable
-//fun BallControlFragment() {
-//    TODO("Not yet implemented")
-//}
+@Composable
+fun GestureActivityContent() {
+    var logText by remember { mutableStateOf("Log: ") }
+
+    val fragmentManager = (LocalContext.current as? FragmentActivity)?.supportFragmentManager
+
+    Column {
+        if (fragmentManager != null) {
+            val transaction = fragmentManager.beginTransaction()
+
+            val topFragment = BallCanvasFragment()
+            val bottomFragment = GestureLogsFragment()
+
+            transaction.replace(R.id.fragmentContainer1, topFragment)
+//            transaction.replace(R.id.fragmentContainer2, bottomFragment) //todo
+
+            transaction.commit()
+        } else {
+            // Handle the case where fragmentManager is null
+        }
+
+        // Your other Compose UI elements here
+    }
+}
+

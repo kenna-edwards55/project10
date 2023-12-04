@@ -1,29 +1,47 @@
+package com.example.project10
+
+// BallCanvasFragment.kt
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.PointF
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import android.graphics.Matrix
-import android.graphics.PointF
-import com.example.project10.R
+
 
 class BallCanvasFragment : Fragment() {
 
     private lateinit var imageView: ImageView
-    private var matrix = Matrix()
-    private val startPoint = PointF()
+    private lateinit var bitmap: Bitmap
+    private lateinit var canvas: Canvas
+    private lateinit var paint: Paint
+    private lateinit var matrix: Matrix
+    private var startPoint = PointF(0f, 0f)
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_gesture_playground, container, false)
+        val view = inflater.inflate(R.layout.fragment_ball_canvas, container, false)
         imageView = view.findViewById(R.id.ballImageView)
+
+        // Initialize bitmap, canvas, paint, and matrix
+        bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
+        canvas = Canvas(bitmap)
+        paint = Paint().apply { color = Color.RED }
+        matrix = Matrix()
+
+        imageView.setImageBitmap(bitmap)
 
         imageView.setOnTouchListener { _, event ->
             when (event.action) {
@@ -34,17 +52,22 @@ class BallCanvasFragment : Fragment() {
                     val deltaX = event.x - startPoint.x
                     val deltaY = event.y - startPoint.y
                     matrix.postTranslate(deltaX, deltaY)
-                    imageView.imageMatrix = matrix
                     startPoint.set(event.x, event.y)
+                    updateCanvas()
                 }
                 MotionEvent.ACTION_UP -> {
-                    // You can perform additional actions on touch up if needed
-                    Toast.makeText(requireContext(), "Ball moved", Toast.LENGTH_SHORT).show()
+                    // Perform additional actions on touch up if needed
                 }
             }
             true
         }
 
         return view
+    }
+
+    private fun updateCanvas() {
+        canvas.drawColor(Color.WHITE)
+        canvas.drawCircle(250f, 250f, 50f, paint)
+        imageView.invalidate()
     }
 }
