@@ -112,7 +112,7 @@ fun AppNavigator() {
             SensorActivityContent(navController)
         }
         composable("gesture_activity") {
-            GestureActivityContent()
+            GestureActivityContent(navController)
         }
 
     }
