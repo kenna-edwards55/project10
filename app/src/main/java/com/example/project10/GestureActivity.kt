@@ -14,13 +14,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.remember
 import androidx.fragment.app.FragmentActivity
-
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.EmptyBuildDrawCacheParams.size
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -105,10 +111,12 @@ fun LandscapeLayout(navController: NavHostController) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BallCanvasContent() {
-    var ballPosition by remember { mutableStateOf(Offset(0f, 0f)) }
-//    var startPoint by remember { mutableStateOf(PointF(0f, 0f)) }
+    var ballPosition by remember { mutableStateOf(Offset(50f, 50f)) }
     var startPoint = PointF(0f, 0f)
+    var endPoint = PointF(0f,0f)
     var matrix by remember { mutableStateOf(android.graphics.Matrix()) }
+    var deltaX : Float = 0.0F
+    var deltaY : Float = 0.0F
 
     Canvas(
         modifier = Modifier.fillMaxSize().padding(10.dp).pointerInteropFilter { motionEvent ->
@@ -118,20 +126,26 @@ fun BallCanvasContent() {
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    Log.i("BallCanvasContent", "x: ${motionEvent.x}, y: ${motionEvent.y}")
+//                    Log.i("BallCanvasContent", "x: ${motionEvent.x}, y: ${motionEvent.y}")
 
-                    val deltaX = motionEvent.x - startPoint.x
-                    val deltaY = motionEvent.y - startPoint.y
+                    deltaX = motionEvent.x - startPoint.x
+                    deltaY = motionEvent.y - startPoint.y
                     matrix.postTranslate(deltaX, deltaY)
                     startPoint.set(motionEvent.x, motionEvent.y)
 
                     ballPosition = Offset(ballPosition.x + deltaX, ballPosition.y + deltaY)
-                    // Invalidate to trigger a redraw
 
                 }
 
+
                 MotionEvent.ACTION_UP -> {
+                    endPoint.set(motionEvent.x, motionEvent.y)
+
+                    if ((startPoint.x == endPoint.x) && (startPoint.y == endPoint.y)) {
+                        SharedState.gestureLogs = SharedState.gestureLogs + "The User Tapped"
+                    }
                     // Handle touch up
+
                 }
             }
             true
@@ -143,32 +157,47 @@ fun BallCanvasContent() {
     }
 }
 
+
 @Composable
 fun GestureLogsContent() {
+//    var gestureLogsText : MutableList<String> = mutableListOf("")
 
+    Log.d("GestureLogs", SharedState.gestureLogs.toString())
+//    SharedState.gestureLogs += "Hello"
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        Text(
+            text = "Gesture Logs",
+            modifier = Modifier
+                .padding(16.dp)
+        )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            items(SharedState.gestureLogs) { gesture ->
+                Text(text = gesture)
+//                GestureItem(gesture = gesture)
+                Divider()
+            }
+        }
+    }
 }
 
-
-
-
-
-
-//    val fragmentManager = (LocalContext.current as? FragmentActivity)?.supportFragmentManager
-//
-//    Column {
-//        if (fragmentManager != null) {
-//            val transaction = fragmentManager.beginTransaction()
-//
-//            val topFragment = BallCanvasFragment()
-//            val bottomFragment = GestureLogsFragment()
-//
-//            transaction.replace(R.id.fragmentContainer1, topFragment)
-////            transaction.replace(R.id.fragmentContainer2, bottomFragment) //todo
-//
-//            transaction.commit()
-//        } else {
-//            // Handle the case where fragmentManager is null
-//        }
-
-// Your other Compose UI elements here
+//@Composable
+//fun GestureItem(gesture: String) {
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(16.dp),
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        Spacer(modifier = Modifier.width(8.dp))
+//        Text(text = gesture)
 //    }
+//}
