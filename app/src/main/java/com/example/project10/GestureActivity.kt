@@ -1,42 +1,24 @@
-// GestureActivity.kt
+
 package com.example.project10
+
 import android.content.res.Configuration
 import android.graphics.PointF
-import android.os.Bundle
-import android.util.Log
+import androidx.compose.*
 import android.view.MotionEvent
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.remember
-import androidx.fragment.app.FragmentActivity
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.widget.ConstraintSet.Motion
 import androidx.navigation.NavHostController
-import com.example.project10.SharedState.matrix
 
 @Composable
 fun GestureActivityContent(navController:NavHostController) {
@@ -103,10 +85,8 @@ fun isWithinRange(targetValue: Float, referenceValue: Float, range: Float): Bool
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BallCanvasContent() {
-//    var ballPosition by remember { mutableStateOf(Offset(50f, 50f)) }
     var startPoint = PointF(0f, 0f)
     var endPoint = PointF(0f,0f)
-//    var matrix by remember { mutableStateOf(android.graphics.Matrix()) }
     var deltaX : Float = 0.0F
     var deltaY : Float = 0.0F
 
@@ -118,15 +98,9 @@ fun BallCanvasContent() {
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-//                    Log.i("BallCanvasContent", "x: ${motionEvent.x}, y: ${motionEvent.y}")
-
                     deltaX = motionEvent.x - startPoint.x
                     deltaY = motionEvent.y - startPoint.y
-                    matrix.postTranslate(deltaX, deltaY)
-//                    startPoint.set(motionEvent.x, motionEvent.y)
-
-//                    ballPosition = Offset(ballPosition.x + deltaX, ballPosition.y + deltaY)
-
+                    SharedState.matrix.postTranslate(deltaX, deltaY)
                 }
 
 
@@ -156,10 +130,6 @@ fun BallCanvasContent() {
                             SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up- right"
                         }
                     }
-
-
-                    // Handle touch up
-
                 }
             }
             true
@@ -174,18 +144,11 @@ fun BallCanvasContent() {
 
 @Composable
 fun GestureLogsContent() {
-
-//    Log.d("GestureLogs", SharedState.gestureLogs.toString())
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Text(
-            text = "Gesture Logs",
-            modifier = Modifier
-                .padding(16.dp)
-        )
 
         LazyColumn(
             modifier = Modifier
@@ -193,7 +156,18 @@ fun GestureLogsContent() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             items(SharedState.gestureLogs) { gesture ->
-                Text(text = gesture)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Gray.copy(alpha = 0.2f)) // Set gray low opacity background
+                ) {
+                    Text(
+                        text = gesture,
+                        fontStyle = FontStyle.Italic,
+                        modifier = Modifier
+                            .padding(16.dp)
+                    )
+                }
                 Divider()
             }
         }
