@@ -8,9 +8,11 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -19,10 +21,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+//import com.example.project10.SharedState.currentCity
+//import com.example.project10.SharedState.currentState
 
 
 class SensorActivity(navController: NavHostController) : ComponentActivity() {
@@ -31,7 +40,7 @@ class SensorActivity(navController: NavHostController) : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        updateComposeUI()
         setContent {
             SensorActivityContent(navController = navController)
         }
@@ -42,6 +51,8 @@ class SensorActivity(navController: NavHostController) : ComponentActivity() {
 fun SensorActivityContent(navController: NavHostController) {
     var ambientTemperature by remember { mutableStateOf<Float?>(null) }
     var relativeHumidity by remember { mutableStateOf<Float?>(null) }
+    var currentCity by remember { mutableStateOf<String?>(null) }
+    var currentState by remember { mutableStateOf<String?>(null) }
 
     val context = LocalContext.current
 
@@ -98,6 +109,23 @@ fun SensorActivityContent(navController: NavHostController) {
         )
     }
 }
+//
+//@Composable
+//fun SensorActivityUI(
+//    ambientTemperature: Float?,
+//    relativeHumidity: Float?,
+//    navController: NavHostController
+//) {
+//    Column {
+//        // Add UI components for displaying sensor data
+//        Text("Your Name: Kenna Edwards", modifier = Modifier.padding(16.dp))
+//        Text("Your Location: ${SharedState.currentState}, ${SharedState.currentCity}", modifier = Modifier.padding(16.dp))
+//        Text("Current Temperature: ${ambientTemperature?.toString() ?: "N/A"} °C", modifier = Modifier.padding(16.dp))
+//        Text("Current Humidity: ${relativeHumidity?.toString() ?: "N/A"} %", modifier = Modifier.padding(16.dp))
+//        // Add a button for fling operation
+//        FlingButton(navController = navController)
+//    }
+//}
 
 @Composable
 fun SensorActivityUI(
@@ -105,16 +133,60 @@ fun SensorActivityUI(
     relativeHumidity: Float?,
     navController: NavHostController
 ) {
-    Column {
-        // Add UI components for displaying sensor data
-        Text("Your Name: Kenna Edwards", modifier = Modifier.padding(16.dp))
-        Text("Your Location: ${SharedState.currentState}, ${SharedState.currentCity}", modifier = Modifier.padding(16.dp))
-        Text("Current Temperature: ${ambientTemperature?.toString() ?: "N/A"} °C", modifier = Modifier.padding(16.dp))
-        Text("Current Humidity: ${relativeHumidity?.toString() ?: "N/A"} %", modifier = Modifier.padding(16.dp))
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // Display user information
+        Text(
+            text = "Your Name: Kenna Edwards",
+            modifier = Modifier.padding(bottom = 8.dp),
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+
+        // Display location information
+        Text(
+            text = "Your Location: ${SharedState.currentState}, ${SharedState.currentCity}",
+            modifier = Modifier.padding(bottom = 8.dp),
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontStyle = FontStyle.Italic
+            )
+        )
+
+        // Display current temperature
+        Text(
+            text = "Current Temperature: ${ambientTemperature?.toString() ?: "N/A"} °C",
+            modifier = Modifier.padding(bottom = 8.dp),
+            style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Red // Customize color
+            )
+        )
+
+        // Display current humidity
+        Text(
+            text = "Current Humidity: ${relativeHumidity?.toString() ?: "N/A"} %",
+            modifier = Modifier.padding(bottom = 8.dp),
+            style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Blue // Customize color
+            )
+        )
+
         // Add a button for fling operation
         FlingButton(navController = navController)
     }
 }
+
 
 @Composable
 fun FlingButton(navController: NavHostController) {
@@ -128,4 +200,10 @@ fun FlingButton(navController: NavHostController) {
     ) {
         Text("Gesture Playground")
     }
+}
+
+fun updateComposeUI() {
+    // Notify Compose to re-compose the UI
+    SharedState.currentState = SharedState.currentState
+    SharedState.currentCity = SharedState.currentCity
 }

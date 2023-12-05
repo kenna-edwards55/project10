@@ -52,6 +52,8 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.android.gms:play-services-location:17.2.1")
+
     implementation ("androidx.activity:activity-ktx:1.3.1")
     implementation ("androidx.fragment:fragment-ktx:1.3.6")
     implementation ("org.jetbrains.kotlin:kotlin-stdlib")
