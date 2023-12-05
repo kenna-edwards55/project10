@@ -36,17 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintSet.Motion
 import androidx.navigation.NavHostController
-
-//class GestureActivity : ComponentActivity() {
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        setContent {
-//            GestureActivityContent()
-//        }
-//    }
-//}
+import com.example.project10.SharedState.matrix
 
 @Composable
 fun GestureActivityContent(navController:NavHostController) {
@@ -56,10 +46,6 @@ fun GestureActivityContent(navController:NavHostController) {
     } else {
         LandscapeLayout(navController)
     }
-
-    var logText by remember { mutableStateOf("Log: ") }
-
-
 }
 
 @Composable
@@ -117,10 +103,10 @@ fun isWithinRange(targetValue: Float, referenceValue: Float, range: Float): Bool
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BallCanvasContent() {
-    var ballPosition by remember { mutableStateOf(Offset(50f, 50f)) }
+//    var ballPosition by remember { mutableStateOf(Offset(50f, 50f)) }
     var startPoint = PointF(0f, 0f)
     var endPoint = PointF(0f,0f)
-    var matrix by remember { mutableStateOf(android.graphics.Matrix()) }
+//    var matrix by remember { mutableStateOf(android.graphics.Matrix()) }
     var deltaX : Float = 0.0F
     var deltaY : Float = 0.0F
 
@@ -145,28 +131,33 @@ fun BallCanvasContent() {
 
 
                 MotionEvent.ACTION_UP -> {
-                    ballPosition = Offset(ballPosition.x + deltaX, ballPosition.y + deltaY)
+
                     endPoint.set(motionEvent.x, motionEvent.y)
 
                     if ((startPoint.x == endPoint.x) && (startPoint.y == endPoint.y)) {
                         SharedState.gestureLogs = SharedState.gestureLogs + "You tapped"
-                    } else if (isWithinRange(startPoint.x, endPoint.x, 20f) && (startPoint.y < endPoint.y )) {
-                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down"
-                    } else if (isWithinRange(startPoint.x, endPoint.x, 20f) && (startPoint.y > endPoint.y )) {
-                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up"
-                    } else if ((startPoint.x > endPoint.x ) && isWithinRange(startPoint.y, endPoint.y, 20f)) {
-                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped left"
-                    } else if ((startPoint.x < endPoint.x ) && isWithinRange(startPoint.y, endPoint.y, 20f)) {
-                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped right"
-                    } else if ((startPoint.x > endPoint.x) && (startPoint.y < endPoint.y)) {
-                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down- left"
-                    } else if ((startPoint.x > endPoint.x) && (startPoint.y > endPoint.y)) {
-                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up- left"
-                    } else if ((startPoint.x < endPoint.x) &&(startPoint.y < endPoint.y)) {
-                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down- right"
-                    } else if ((startPoint.x < endPoint.x ) &&(startPoint.y > endPoint.y)) {
-                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up- right"
+                    } else {
+                        SharedState.ballPosition = Offset(SharedState.ballPosition.x + deltaX, SharedState.ballPosition.y + deltaY)
+                        if (isWithinRange(startPoint.x, endPoint.x, 20f) && (startPoint.y < endPoint.y )) {
+                            SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down"
+                        } else if (isWithinRange(startPoint.x, endPoint.x, 20f) && (startPoint.y > endPoint.y )) {
+                            SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up"
+                        } else if ((startPoint.x > endPoint.x ) && isWithinRange(startPoint.y, endPoint.y, 20f)) {
+                            SharedState.gestureLogs = SharedState.gestureLogs + "You swiped left"
+                        } else if ((startPoint.x < endPoint.x ) && isWithinRange(startPoint.y, endPoint.y, 20f)) {
+                            SharedState.gestureLogs = SharedState.gestureLogs + "You swiped right"
+                        } else if ((startPoint.x > endPoint.x) && (startPoint.y < endPoint.y)) {
+                            SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down- left"
+                        } else if ((startPoint.x > endPoint.x) && (startPoint.y > endPoint.y)) {
+                            SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up- left"
+                        } else if ((startPoint.x < endPoint.x) &&(startPoint.y < endPoint.y)) {
+                            SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down- right"
+                        } else if ((startPoint.x < endPoint.x ) &&(startPoint.y > endPoint.y)) {
+                            SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up- right"
+                        }
                     }
+
+
                     // Handle touch up
 
                 }
@@ -174,19 +165,17 @@ fun BallCanvasContent() {
             true
         }
     ) {
-        drawRect(color = Color.Blue, size = size)
+        drawRect(color = Color.Cyan, alpha = 0.5f, size = size)
 
-        drawCircle(color = Color.Red, 100f, ballPosition, 1.0f, style = Fill)
+        drawCircle(color = Color.Red, 50f, SharedState.ballPosition, 1.0f, style = Fill)
     }
 }
 
 
 @Composable
 fun GestureLogsContent() {
-//    var gestureLogsText : MutableList<String> = mutableListOf("")
 
-    Log.d("GestureLogs", SharedState.gestureLogs.toString())
-//    SharedState.gestureLogs += "Hello"
+//    Log.d("GestureLogs", SharedState.gestureLogs.toString())
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -205,22 +194,8 @@ fun GestureLogsContent() {
         ) {
             items(SharedState.gestureLogs) { gesture ->
                 Text(text = gesture)
-//                GestureItem(gesture = gesture)
                 Divider()
             }
         }
     }
 }
-
-//@Composable
-//fun GestureItem(gesture: String) {
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(16.dp),
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        Spacer(modifier = Modifier.width(8.dp))
-//        Text(text = gesture)
-//    }
-//}
