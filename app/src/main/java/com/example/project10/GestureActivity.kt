@@ -108,6 +108,12 @@ fun LandscapeLayout(navController: NavHostController) {
     }
 }
 
+fun isWithinRange(targetValue: Float, referenceValue: Float, range: Float): Boolean {
+    val lowerBound = referenceValue - range
+    val upperBound = referenceValue + range
+
+    return targetValue in lowerBound..upperBound
+}
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BallCanvasContent() {
@@ -144,27 +150,25 @@ fun BallCanvasContent() {
 
                     if ((startPoint.x == endPoint.x) && (startPoint.y == endPoint.y)) {
                         SharedState.gestureLogs = SharedState.gestureLogs + "You tapped"
-                    } else if ((startPoint.x <= endPoint.x + 20 || startPoint.x >= endPoint.x - 20) && (startPoint.y - 20 < endPoint.y  || startPoint.y + 20 < endPoint.y )) {
+                    } else if (isWithinRange(startPoint.x, endPoint.x, 20f) && (startPoint.y < endPoint.y )) {
                         SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down"
-                    }
-
-                    else if ((startPoint.x > endPoint.x) && (startPoint.y - 20 < endPoint.y  || startPoint.y + 20 < endPoint.y )) {
+                    } else if (isWithinRange(startPoint.x, endPoint.x, 20f) && (startPoint.y > endPoint.y )) {
+                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up"
+                    } else if ((startPoint.x > endPoint.x ) && isWithinRange(startPoint.y, endPoint.y, 20f)) {
+                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped left"
+                    } else if ((startPoint.x < endPoint.x ) && isWithinRange(startPoint.y, endPoint.y, 20f)) {
+                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped right"
+                    } else if ((startPoint.x > endPoint.x) && (startPoint.y < endPoint.y)) {
                         SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down- left"
-                    } else if ((startPoint.x > endPoint.x) && (startPoint.y - 20 > endPoint.y  || startPoint.y + 20 > endPoint.y )) {
+                    } else if ((startPoint.x > endPoint.x) && (startPoint.y > endPoint.y)) {
                         SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up- left"
-                    } else if ((startPoint.x - 20 < endPoint.x  || startPoint.x + 20 < endPoint.x ) &&(startPoint.y < endPoint.y)) {
+                    } else if ((startPoint.x < endPoint.x) &&(startPoint.y < endPoint.y)) {
                         SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down- right"
-                    } else if ((startPoint.x - 20 < endPoint.x  || startPoint.x + 20 < endPoint.x ) &&(startPoint.y > endPoint.y)) {
+                    } else if ((startPoint.x < endPoint.x ) &&(startPoint.y > endPoint.y)) {
                         SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up- right"
                     }
                     // Handle touch up
 
-
-//                    else if ((startPoint.x - 20 >= endPoint.x  || startPoint.x + 20 <= endPoint.x ) && (startPoint.y < endPoint.y )) {
-//                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped down"
-//                    } else if ((startPoint.x - 20 >= endPoint.x  || startPoint.x + 20 <= endPoint.x ) && (startPoint.y > endPoint.y )) {
-//                        SharedState.gestureLogs = SharedState.gestureLogs + "You swiped up"
-//                    }
                 }
             }
             true
