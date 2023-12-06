@@ -61,11 +61,6 @@ class MainActivity : ComponentActivity() {
         // Request location permission
         requestLocationPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
-//        val locationRequest = LocationRequest. {
-//            interval = 10000 // Update interval in milliseconds
-//            fastestInterval = 5000 // Fastest update interval in milliseconds
-//            priority = LocationRequest.PRIORITY_HIGH_ACCURACY // Request high-accuracy location updates
-//        }
         // Set up location callback
         locationCallback = object : LocationCallback() {
              fun onLocationResult(locationResult: LocationResult?) {
@@ -114,19 +109,6 @@ class MainActivity : ComponentActivity() {
                 .addOnFailureListener { e ->
                     Log.e("Location", "Error getting location", e)
                 }
-//            fusedLocationClient.requestLocationUpdates(, locationCallback, Looper.getMainLooper())
-//            fusedLocationClient.requestLocationUpdates(locationRequest,
-//                locationCallback,
-//                Looper.getMainLooper())
-
-//            fusedLocationClient.requestLocationUpdates(
-//                LocationRequest.Builder()
-//                    .setPriority(LocationRequest.P)
-//                    .setInterval(1000) // Update interval in milliseconds
-//                    .build(),
-//                locationCallback,
-//                Looper.getMainLooper()
-//            )
         }
 
 
