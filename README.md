@@ -9,9 +9,14 @@ The Gesture Playground is an Android application that allows users to interact w
 - Gesture Logging: Logs of performed gestures are displayed in a scrollable list.
 - Portrait and Landscape Modes: The app supports both portrait and landscape modes, adjusting the layout accordingly.
 
+  ## Discussion
+  I struggled with uploading my app to Google Play, as I was unfamiliar with building APKs.  Additionally, I struggled with live updating sensors, but learned I could use a SharedState object to communicate changes throughout the app without a View Model.
+
 ## Video Example
 
 <img src= 'https://github.com/kenna-edwards55/project10/blob/master/Project10Demo.gif' width='70%'>
 
 ## Google Play Testing Track
 - Currently still in review 
+
+<img src = 'https://github.com/kenna-edwards55/project10/blob/master/Google%20Play.png' width = '50%'>
