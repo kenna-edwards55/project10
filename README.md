@@ -11,3 +11,7 @@ The Gesture Playground is an Android application that allows users to interact w
 
 ## Video Example
 
+<img src= 'https://github.com/kenna-edwards55/project10/blob/master/Project10Demo.gif' width='70%'>
+
+## Google Play Testing Track
+- Currently still in review 
