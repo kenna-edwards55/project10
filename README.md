@@ -8,3 +8,6 @@ The Gesture Playground is an Android application that allows users to interact w
 - Canvas Interaction: Users can draw on the canvas and move a ball with their gestures.
 - Gesture Logging: Logs of performed gestures are displayed in a scrollable list.
 - Portrait and Landscape Modes: The app supports both portrait and landscape modes, adjusting the layout accordingly.
+
+## Video Example
+
