@@ -61,16 +61,6 @@ class MainActivity : ComponentActivity() {
         // Request location permission
         requestLocationPermission.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
-        // Set up location callback
-        locationCallback = object : LocationCallback() {
-             fun onLocationResult(locationResult: LocationResult?) {
-                locationResult?.lastLocation?.let {
-                    currentLocation = Pair(it.latitude, it.longitude)
-                    getLocationData()
-                }
-            }
-        }
-
         setContent {
             Project10Theme {
                 // A surface container using the 'background' color from the theme
