@@ -3,6 +3,7 @@ package com.example.project10
 
 import android.content.res.Configuration
 import android.graphics.PointF
+import android.util.Log
 import androidx.compose.*
 import android.view.MotionEvent
 import androidx.compose.foundation.*
@@ -32,8 +33,10 @@ fun GestureActivityContent(navController:NavHostController) {
     val configuration = LocalConfiguration.current
     // Determine the device orientation and display the appropriate layout
     if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Log.d("GestureActivity.kt", "Orientation: Portrait")
         PortraitLayout(navController)
     } else {
+        Log.d("GestureActivity.kt", "Orientation: Landscape")
         LandscapeLayout(navController)
     }
 }

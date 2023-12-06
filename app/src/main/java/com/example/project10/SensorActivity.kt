@@ -109,23 +109,6 @@ fun SensorActivityContent(navController: NavHostController) {
         )
     }
 }
-//
-//@Composable
-//fun SensorActivityUI(
-//    ambientTemperature: Float?,
-//    relativeHumidity: Float?,
-//    navController: NavHostController
-//) {
-//    Column {
-//        // Add UI components for displaying sensor data
-//        Text("Your Name: Kenna Edwards", modifier = Modifier.padding(16.dp))
-//        Text("Your Location: ${SharedState.currentState}, ${SharedState.currentCity}", modifier = Modifier.padding(16.dp))
-//        Text("Current Temperature: ${ambientTemperature?.toString() ?: "N/A"} °C", modifier = Modifier.padding(16.dp))
-//        Text("Current Humidity: ${relativeHumidity?.toString() ?: "N/A"} %", modifier = Modifier.padding(16.dp))
-//        // Add a button for fling operation
-//        FlingButton(navController = navController)
-//    }
-//}
 
 @Composable
 fun SensorActivityUI(
@@ -192,6 +175,7 @@ fun SensorActivityUI(
 fun FlingButton(navController: NavHostController) {
     Button(
         onClick = {
+            Log.d("SensorActivity.kt", "Gesture Activity button pressed")
             navController.navigate("gesture_activity")
         },
         modifier = Modifier
